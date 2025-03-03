@@ -1,4 +1,4 @@
-test: test
+test: list_test
 	./list_test
 
 list.o: list.c list.h
