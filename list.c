@@ -1,10 +1,9 @@
 #include "list.h"
-
 #include <stdlib.h>
 
-size_t list_get_size(struct node *head)
+size_t list_get_size(list_t *head)
 {
-    struct node *last_node = head->next;
+    list_t *last_node = head->next;
     int i = 1;
     while (last_node != NULL)
     {
@@ -15,17 +14,17 @@ size_t list_get_size(struct node *head)
     return i;
 }
 
-struct node *list_create(int data)
+list_t *list_create(int data)
 {
-    struct node *new_node = (struct node *)malloc(sizeof(struct node));
+    list_t *new_node = (list_t *)malloc(sizeof(list_t));
     new_node->data = data;
     new_node->next = NULL;
     return new_node;
 }
 
-void list_free(struct node *head)
+void list_free(list_t *head)
 {
-    struct node *current, *tmp;
+    list_t *current, *tmp;
 
     if (head != NULL)
     {
@@ -42,19 +41,19 @@ void list_free(struct node *head)
     }
 }
 
-void list_insert_head(struct node **head, int data)
+void list_insert_head(list_t **head, int data)
 {
-    struct node *new_node = list_create(data);
+    list_t *new_node = list_create(data);
     new_node->next = *head;
     *head = new_node;
 }
 
-void list_insert_end(struct node **head, int data)
+void list_insert_end(list_t **head, int data)
 {
-    struct node *current = *head;
-    struct node *new_node = list_create(data);
+    list_t *current = *head;
+    list_t *new_node = list_create(data);
 
-    if (*head == NULL)
+    if (head == NULL)
     {
         *head = new_node;
     }
@@ -69,16 +68,19 @@ void list_insert_end(struct node **head, int data)
     }
 }
 
-void list_insert_at(struct node **head, int data, size_t position)
+void list_insert_at(list_t **head, int data, size_t position)
 {
-    if (position == 0 || *head == NULL)
+    if (head == NULL)
+        return;
+
+    if (position == 0)
     {
         list_insert_head(head, data);
         return;
     }
 
-    struct node *previous = NULL;
-    struct node *current = *head;
+    list_t *previous = NULL;
+    list_t *current = *head;
     int i = 0;
 
     while (current != NULL)
@@ -94,18 +96,18 @@ void list_insert_at(struct node **head, int data, size_t position)
     if (position > i)
         return;
 
-    struct node *new_node = list_create(data);
+    list_t *new_node = list_create(data);
     previous->next = new_node;
     new_node->next = current;
 }
 
-void list_delete_at(struct node **head, size_t position)
+void list_delete_at(list_t **head, size_t position)
 {
     if (head == NULL)
         return;
 
-    struct node *previous = NULL;
-    struct node *current = *head;
+    list_t *previous = NULL;
+    list_t *current = *head;
     int i = 0;
 
     if (position == 0)
@@ -138,12 +140,12 @@ void list_delete_at(struct node **head, size_t position)
     free(current);
 }
 
-int list_get_at(struct node **head, size_t position)
+int list_get_at(list_t **head, size_t position)
 {
     if (head == NULL)
         return 0;
 
-    struct node *current = *head;
+    list_t *current = *head;
     int i = 0;
 
     while (i < position)

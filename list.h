@@ -3,26 +3,26 @@
 
 #include <stdio.h>
 
-struct node
+typedef struct node
 {
     int data;
     struct node *next;
-};
+} list_t;
 
-size_t list_get_size(struct node *head);
+size_t list_get_size(list_t *head);
 
-struct node *list_create(int);
+list_t *list_create(int);
 
-void list_free(struct node *);
+void list_free(list_t *);
 
-void list_insert_head(struct node **, int);
+void list_insert_head(list_t **, int);
 
-void list_insert_end(struct node **, int);
+void list_insert_end(list_t **, int);
 
-void list_insert_at(struct node **, int, size_t);
+void list_insert_at(list_t **, int, size_t);
 
-void list_delete_at(struct node **, size_t);
+void list_delete_at(list_t **, size_t);
 
-int list_get_at(struct node **, size_t);
+int list_get_at(list_t **, size_t);
 
 #endif

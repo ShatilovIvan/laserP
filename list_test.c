@@ -3,7 +3,7 @@
 
 void list_get_size_test()
 {
-    struct node *list = list_create(10);
+    list_t *list = list_create(10);
     list_insert_end(&list, 20);
 
     assert(list_get_size(list) == 2);
@@ -13,7 +13,7 @@ void list_get_size_test()
 
 void list_create_test()
 {
-    struct node *list = list_create(10);
+    list_t *list = list_create(10);
     assert(list != NULL);
     assert(list->data == 10);
 
@@ -22,7 +22,7 @@ void list_create_test()
 
 void list_insert_head_test()
 {
-    struct node *list = list_create(10);
+    list_t *list = list_create(10);
     list_insert_head(&list, 20);
     assert(list->data == 20);
 
@@ -31,7 +31,7 @@ void list_insert_head_test()
 
 void list_insert_end_test()
 {
-    struct node *list = list_create(10);
+    list_t *list = list_create(10);
     list_insert_end(&list, 20);
     assert(list->next->data == 20);
 
@@ -40,7 +40,7 @@ void list_insert_end_test()
 
 void list_insert_at_test()
 {
-    struct node *list = list_create(10);
+    list_t *list = list_create(10);
     list_insert_end(&list, 20);
     list_insert_at(&list, 30, 1);
     assert(list->next->data == 30);
@@ -50,7 +50,7 @@ void list_insert_at_test()
 
 void list_delete_at_test()
 {
-    struct node *list = list_create(10);
+    list_t *list = list_create(10);
     list_insert_end(&list, 20);
     list_delete_at(&list, 0);
     assert(list->data == 20);
@@ -60,7 +60,7 @@ void list_delete_at_test()
 
 void list_get_at_test()
 {
-    struct node *list = list_create(10);
+    list_t *list = list_create(10);
     list_insert_end(&list, 20);
     list_insert_end(&list, 30);
     assert(list_get_at(&list, 1) == 20);
