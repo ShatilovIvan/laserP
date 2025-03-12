@@ -3,7 +3,7 @@
 
 void stack_is_empty_test()
 {
-    struct stack *st = stack_initialize();
+    stack_t *st = stack_initialize(4);
     assert(stack_is_empty(st));
 
     stack_free(st);
@@ -11,9 +11,9 @@ void stack_is_empty_test()
 
 void stack_is_full_test()
 {
-    struct stack *st = stack_initialize();
+    stack_t *st = stack_initialize(4);
 
-    for (int i = 0; i < MAX_SIZE; i++)
+    for (int i = 0; i < st->max_size; i++)
     {
         stack_push(st, i);
     }
@@ -25,7 +25,7 @@ void stack_is_full_test()
 
 void stack_initialize_test()
 {
-    struct stack *st = stack_initialize();
+    stack_t *st = stack_initialize(4);
     assert(st != NULL);
 
     stack_free(st);
@@ -33,7 +33,7 @@ void stack_initialize_test()
 
 void stack_push_test()
 {
-    struct stack *st = stack_initialize();
+    stack_t *st = stack_initialize(4);
     stack_push(st, 10);
     assert(st->arr[0] == 10);
 
@@ -42,7 +42,7 @@ void stack_push_test()
 
 void stack_peek_test()
 {
-    struct stack *st = stack_initialize();
+    stack_t *st = stack_initialize(4);
     stack_push(st, 10);
     assert(stack_peek(st) == 10);
 
@@ -51,7 +51,7 @@ void stack_peek_test()
 
 void stack_pop_test()
 {
-    struct stack *st = stack_initialize();
+    stack_t *st = stack_initialize(4);
     stack_push(st, 10);
 
     assert(stack_pop(st) == 10);

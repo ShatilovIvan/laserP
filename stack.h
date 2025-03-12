@@ -1,29 +1,29 @@
 #ifndef STACK_H
 #define STACK_H
+#define STACK_EMPTY -1
 
 #include <stdbool.h>
 #include <stdio.h>
 
-#define MAX_SIZE 8
-
-struct stack
+typedef struct
 {
-    int arr[MAX_SIZE];
-    int top;
-};
+    int *arr;
+    size_t top;
+    size_t max_size;
+} stack_t;
 
-bool stack_is_empty(struct stack *);
+bool stack_is_empty(stack_t *);
 
-bool stack_is_full(struct stack *);
+bool stack_is_full(stack_t *);
 
-struct stack *stack_initialize();
+stack_t *stack_initialize(size_t);
 
-void stack_free(struct stack *);
+void stack_free(stack_t *);
 
-void stack_push(struct stack *, int);
+void stack_push(stack_t *, int);
 
-int stack_peek(struct stack *st);
+int stack_peek(stack_t *st);
 
-int stack_pop(struct stack *);
+int stack_pop(stack_t *);
 
 #endif

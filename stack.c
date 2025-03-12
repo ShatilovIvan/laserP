@@ -2,34 +2,37 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#define MAX_SIZE 8
-
-bool stack_is_empty(struct stack *st)
+bool stack_is_empty(stack_t *st)
 {
-    return st->top == -1;
+    return st->top == STACK_EMPTY;
 }
 
-bool stack_is_full(struct stack *st)
+bool stack_is_full(stack_t *st)
 {
-    return st->top == MAX_SIZE - 1;
+    return st->top == st->max_size - 1;
 }
 
-struct stack *stack_initialize()
+stack_t *stack_initialize(size_t count)
 {
-    struct stack *new_stack = (struct stack *)malloc(sizeof(struct stack));
-    new_stack->top = -1;
+    stack_t *new_stack = (stack_t *)malloc(sizeof(stack_t));
+    new_stack->arr = (int *)malloc(sizeof(int) * count);
+    new_stack->top = STACK_EMPTY;
+    new_stack->max_size = count;
     return new_stack;
 }
 
-void stack_free(struct stack *st)
+void stack_free(stack_t *st)
 {
     if (st == NULL)
         return;
 
+    if (st->arr != NULL)
+        free(st->arr);
+
     free(st);
 }
 
-void stack_push(struct stack *st, int data)
+void stack_push(stack_t *st, int data)
 {
     if (stack_is_full(st))
         return;
@@ -38,18 +41,18 @@ void stack_push(struct stack *st, int data)
     st->arr[st->top] = data;
 }
 
-int stack_peek(struct stack *st)
+int stack_peek(stack_t *st)
 {
     if (stack_is_empty(st))
-        return -1;
+        return STACK_EMPTY;
 
     return st->arr[st->top];
 }
 
-int stack_pop(struct stack *st)
+int stack_pop(stack_t *st)
 {
     if (stack_is_empty(st))
-        return -1;
+        return STACK_EMPTY;
 
     int result = st->arr[st->top];
     st->arr[st->top] = 0;
