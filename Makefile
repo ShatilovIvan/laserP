@@ -1,4 +1,4 @@
-test: 
+all: 
 	@for test in $(shell find . -regex '.*_test'); do \
         echo "Running: $$test"; \
         ./$$test; \
