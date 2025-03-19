@@ -10,10 +10,10 @@ clear:
 	rm -rf *.o *.a *_test
 
 fmt: 
-	clang-format -style=LLVM -i `find -regex ".+\.[ch]"`
+	clang-format -style=Microsoft -i `find -regex ".+\.[ch]"`
 
 check_fmt:
-	clang-format -style=LLVM -i `find -regex ".+\.[ch]"` --dry-run --Werror
+	clang-format -style=Microsoft -i `find -regex ".+\.[ch]"` --dry-run --Werror
 
 %.o: %.c %.h
 	gcc -g -c $< -o $@
