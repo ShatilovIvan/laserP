@@ -25,12 +25,9 @@ double *find_roots(double a, double b, double c, double eps_x, double eps_var)
     d = is_zero(d, eps_var);
     a = is_zero(a, eps_var);
 
-    b = b / a;
-    c = c / a;
-
     double x1, x2;
-    x1 = (-b + sqrt(d)) / 2;
-    x2 = c / x1;
+    x1 = (-b + sqrt(d)) / (2 * a);
+    x2 = c / (x1 * a);
     x1 = is_zero(x1, eps_x);
     x2 = is_zero(x2, eps_x);
 
