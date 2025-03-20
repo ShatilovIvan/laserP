@@ -1,5 +1,7 @@
 #ifndef STACK_H
 #define STACK_H
+
+#define STACK_OK 0
 #define STACK_EMPTY -1
 #define STACK_FULL -2
 
@@ -23,8 +25,8 @@ void stack_free(stack_t *);
 
 int stack_push(stack_t *, int);
 
-int stack_peek(stack_t *st);
+int stack_peek(stack_t *st, int *);
 
-int stack_pop(stack_t *);
+int stack_pop(stack_t *, int *);
 
 #endif

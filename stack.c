@@ -39,23 +39,25 @@ int stack_push(stack_t *st, int data)
 
     st->top++;
     st->arr[st->top] = data;
+	return STACK_OK;
 }
 
-int stack_peek(stack_t *st)
+int stack_peek(stack_t *st, int *out)
 {
     if (stack_is_empty(st))
         return STACK_EMPTY;
 
-    return st->arr[st->top];
+    *out = st->arr[st->top];
+    return STACK_OK;
 }
 
-int stack_pop(stack_t *st)
+int stack_pop(stack_t *st, int *out)
 {
     if (stack_is_empty(st))
         return STACK_EMPTY;
 
-    int result = st->arr[st->top];
+    *out = st->arr[st->top];
     st->arr[st->top] = 0;
     st->top--;
-    return result;
+    return STACK_OK;
 }

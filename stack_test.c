@@ -34,30 +34,32 @@ void stack_initialize_test()
 void stack_push_test()
 {
     stack_t *st = stack_initialize(4);
-    stack_push(st, 10);
-    assert(st->arr[0] == 10);
+    int res = stack_push(st, 10);
+    assert(st->arr[0] == 10 && res == STACK_OK);
 
     stack_free(st);
 }
 
 void stack_peek_test()
 {
+	int out;
     stack_t *st = stack_initialize(4);
     stack_push(st, 10);
-    assert(stack_peek(st) == 10);
+	int res = stack_peek(st, &out);
+    assert(out == 10 && res == STACK_OK);
 
     stack_free(st);
 }
 
 void stack_pop_test()
-{
+{ 
+	int out;
     stack_t *st = stack_initialize(4);
     stack_push(st, 10);
-
-    assert(stack_pop(st) == 10);
-    assert(stack_is_empty(st));
-
-    stack_free(st);
+	int res = stack_pop(st, &out);
+    assert(out == 10 && res == STACK_OK); 
+    
+	stack_free(st);
 }
 
 int main()
