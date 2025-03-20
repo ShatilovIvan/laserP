@@ -39,7 +39,7 @@ int stack_push(stack_t *st, int data)
 
     st->top++;
     st->arr[st->top] = data;
-	return STACK_OK;
+    return STACK_OK;
 }
 
 int stack_peek(stack_t *st, int *out)
