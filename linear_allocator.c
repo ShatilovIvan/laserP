@@ -38,7 +38,7 @@ void *linear_allocator_alloc(linear_allocator_t *allocator, size_t size)
     if (allocator == NULL)
         return NULL;
 
-    if (allocator->offset + size > allocator->total_size)
+    if (allocator->offset + size > allocator->total_size || size == 0)
         return NULL;
 
     void *current_address = allocator->memory + allocator->offset;
