@@ -57,15 +57,6 @@ void test_6()
     assert(res == 1 && fabs(x1) < eps_x);
 }
 
-void test_6()
-{
-    double x1, x2;
-    double a = 1, b = 0, c = -1e-8, eps = 1e-7, eps_x = 1e-7;
-    int res = roots(a, b, c, eps, &x1, &x2);
-
-    assert(res == 1 && fabs(x1) < eps_x);
-}
-
 void test_7()
 {
     double x1, x2;
