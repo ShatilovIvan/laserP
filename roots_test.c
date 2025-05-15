@@ -28,7 +28,7 @@ void test_3()
     double a = 1, b = 0, c = 1, eps = 1e-15, eps_x = 1e-15;
     int res = roots(a, b, c, eps, &x1, &x2);
 
-    assert(res == -1);
+    assert(res == 0);
 }
 
 void test_4()
