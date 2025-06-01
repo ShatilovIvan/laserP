@@ -1,8 +1,10 @@
 SRCS = $(wildcard *_test.c)
 PRGS = $(patsubst %.c, %, $(SRCS))
+LIBS = $(patsubst %_test.c, %.a, $(SRCS))
 
 test: $(PRGS)
 	for test in $(PRGS); do \
+		echo "Running $$test"; \
 		./$$test || exit 1; \
 	done;
 
@@ -10,10 +12,10 @@ clear:
 	rm -rf *.o *.a *_test
 
 fmt: 
-	clang-format -style=Microsoft -i `find -regex ".+\.[ch]"`
+	clang-format -style=LLVM -i `find -regex ".+\.[ch]"`
 
 check_fmt:
-	clang-format -style=Microsoft -i `find -regex ".+\.[ch]"` --dry-run --Werror
+	clang-format -style=LLVM -i `find -regex ".+\.[ch]"` --dry-run --Werror
 
 %.o: %.c %.h
 	gcc -g -c $< -o $@
@@ -24,5 +26,6 @@ check_fmt:
 %_test.o: %_test.c
 	gcc -g -c $^ -o $@
 
-%_test: %_test.o %.a
+%_test: %_test.o $(LIBS)
 	gcc -g -static -o $@ $^ -lm
+
