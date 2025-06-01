@@ -3,10 +3,11 @@
 
 #include <stdlib.h>
 
-typedef struct {
-  void *memory;
-  size_t offset;
-  size_t total_size;
+typedef struct
+{
+    void *memory;
+    size_t offset;
+    size_t total_size;
 
 } linear_allocator_t;
 
