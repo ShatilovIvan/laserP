@@ -1,10 +1,8 @@
 SRCS = $(wildcard *_test.c)
 PRGS = $(patsubst %.c, %, $(SRCS))
-LIBS = $(patsubst %_test.c, %.a, $(SRCS))
 
 test: $(PRGS)
 	for test in $(PRGS); do \
-		echo "Running $$test"; \
 		./$$test || exit 1; \
 	done;
 
@@ -26,6 +24,5 @@ check_fmt:
 %_test.o: %_test.c
 	gcc -g -c $^ -o $@
 
-%_test: %_test.o $(LIBS)
+%_test: %_test.o %.a
 	gcc -g -static -o $@ $^ -lm
-
