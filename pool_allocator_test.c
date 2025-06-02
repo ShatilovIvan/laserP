@@ -24,7 +24,7 @@ void pool_allocator_alloc_test()
     assert(memory1 != NULL);
     *memory1 = 1;
     assert(*memory1 == 1);
-    assert(current == (chunk_t *)memory1);
+    assert(current == (chunk_t *)((char *)memory1 - sizeof(chunk_t)));
     assert(next == allocator->free_list);
 
     current = allocator->free_list;
@@ -32,7 +32,7 @@ void pool_allocator_alloc_test()
     assert(memory2 != NULL);
     *memory2 = 2;
     assert(*memory2 == 2);
-    assert(current == (chunk_t *)memory2);
+    assert(current == (chunk_t *)((char *)memory2 - sizeof(chunk_t)));
     assert(allocator->free_list == NULL);
 
     pool_allocator_deinitialize(allocator);
@@ -46,9 +46,9 @@ void pool_allocator_free_test()
     void *memory2 = pool_allocator_alloc(allocator);
 
     pool_allocator_free(allocator, memory2);
-    assert(allocator->free_list == (chunk_t *)memory2);
+    assert(allocator->free_list == (chunk_t *)((char *)memory2 - sizeof(chunk_t)));
     pool_allocator_free(allocator, memory1);
-    assert(allocator->free_list == (chunk_t *)memory1);
+    assert(allocator->free_list == (chunk_t *)((char *)memory1 - sizeof(chunk_t)));
 
     pool_allocator_deinitialize(allocator);
 }

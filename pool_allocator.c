@@ -10,8 +10,10 @@ pool_allocator_t *pool_allocator_initialize(size_t chunk_count, size_t chunk_siz
     if (allocator == NULL)
         return NULL;
 
+    size_t actual_size = sizeof(chunk_t) + chunk_size;
+
     allocator->chunk_count = chunk_count;
-    allocator->memory = (void *)malloc(chunk_count * chunk_size);
+    allocator->memory = (void *)malloc(chunk_count * actual_size);
 
     if (allocator->memory == NULL)
     {
@@ -24,7 +26,7 @@ pool_allocator_t *pool_allocator_initialize(size_t chunk_count, size_t chunk_siz
     chunk_t *current = allocator->free_list;
     for (int i = 0; i < chunk_count - 1; i++)
     {
-        current->next = (chunk_t *)((unsigned char *)current + sizeof(chunk_t));
+        current->next = (chunk_t *)((char *)current + actual_size);
         current = current->next;
     }
 
@@ -55,7 +57,7 @@ void *pool_allocator_alloc(pool_allocator_t *allocator)
     chunk_t *allocation = allocator->free_list;
     allocator->free_list = allocation->next;
 
-    return (void *)allocation;
+    return (void *)((char *)allocation + sizeof(chunk_t));
 }
 
 void pool_allocator_free(pool_allocator_t *allocator, void *memory)
@@ -66,7 +68,7 @@ void pool_allocator_free(pool_allocator_t *allocator, void *memory)
     if (memory == NULL)
         return;
 
-    chunk_t *free = (chunk_t *)memory;
+    chunk_t *free = (chunk_t *)((char *)memory - sizeof(chunk_t));
     free->next = allocator->free_list;
     allocator->free_list = free;
     return;
