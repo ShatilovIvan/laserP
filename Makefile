@@ -1,9 +1,13 @@
 SRCS = $(wildcard *_test.c)
 PRGS = $(patsubst %.c, %, $(SRCS))
+LIBS = $(patsubst %_test.c, %.a, $(SRCS))
 
 test: $(PRGS)
 	for test in $(PRGS); do \
-		./$$test || exit 1; \
+		echo "Running $$test"; \
+		valgrind --leak-check=full --show-leak-kinds=all \
+		         --track-origins=yes --error-exitcode=1 \
+		         ./$$test || exit 1; \
 	done;
 
 clear: 
@@ -24,5 +28,6 @@ check_fmt:
 %_test.o: %_test.c
 	gcc -g -c $^ -o $@
 
-%_test: %_test.o %.a
+%_test: %_test.o $(LIBS)
 	gcc -g -static -o $@ $^ -lm
+
