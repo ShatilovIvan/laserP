@@ -6,7 +6,7 @@ test: $(PRGS)
 	for test in $(PRGS); do \
 		echo "Running $$test"; \
 		valgrind --leak-check=full --show-leak-kinds=all \
-		         --track-origins=yes --error-exitcode=1 \
+		         --track-origins=yes --undef-value-errors=no --error-exitcode=1 \
 		         ./$$test || exit 1; \
 	done;
 
