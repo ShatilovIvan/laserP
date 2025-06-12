@@ -5,7 +5,8 @@ LIBS = $(patsubst %_test.c, %.a, $(SRCS))
 test: $(PRGS)
 	for test in $(PRGS); do \
 		echo "Running $$test"; \
-		./$$test || exit 1; \
+		valgrind --leak-check=full --errors-for-leak-kinds=all --undef-value-errors=no --error-exitcode=1 \
+		         ./$$test || exit 1; \
 	done;
 
 clear: 
@@ -28,4 +29,3 @@ check_fmt:
 
 %_test: %_test.o $(LIBS)
 	gcc -g -static -o $@ $^ -lm
-

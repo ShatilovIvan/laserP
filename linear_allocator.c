@@ -9,7 +9,7 @@ linear_allocator_t *linear_allocator_initialize(size_t size)
 
     new_allocator->total_size = size;
     new_allocator->offset = 0;
-    new_allocator->memory = (void *)calloc(1, size);
+    new_allocator->memory = (void *)malloc(size);
 
     return new_allocator;
 }
