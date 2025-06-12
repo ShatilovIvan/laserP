@@ -1,60 +1,85 @@
-#include "object_manager.h"
 #include "pool_allocator.h"
 #include <assert.h>
 
-void create_cycle_reference_test()
+void pool_allocator_initialize_test()
 {
-    pool_allocator_t *allocator = pool_allocator_initialize(100, sizeof(object_manager_t));
+    pool_allocator_t *allocator = pool_allocator_initialize(2, sizeof(int));
+
     assert(allocator != NULL);
-    cycle_object *obj1 = create_cycle_object(allocator);
-    cycle_object *obj2 = create_cycle_object(allocator);
-    assert(obj1 != NULL);
-    assert(obj2 != NULL);
-    assert(obj1->manager != NULL);
-    assert(obj2->manager != NULL);
-    assert(obj1->manager->count == 1);
-    assert(obj2->manager->count == 1);
-    create_cycle_reference(obj1, obj2);
-    assert(obj1->ref_to == obj2);
-    assert(obj2->ref_to == obj1);
-    assert(obj1->manager->count == 2);
-    assert(obj2->manager->count == 2);
-    assert(detected_cycle(obj1) == 1);
-    assert(detected_cycle(obj2) == 1);
-    delete_cycle(allocator, obj1);
+    assert(allocator->chunk_count == 2);
+    assert(allocator->memory != NULL);
+    assert(allocator->free_list != NULL);
+
     pool_allocator_deinitialize(allocator);
 }
 
-void detected_cycle_test()
+void pool_allocator_alloc_test()
 {
-    pool_allocator_t *allocator = pool_allocator_initialize(100, sizeof(object_manager_t));
-    assert(allocator != NULL);
-    cycle_object *obj1 = create_cycle_object(allocator);
-    cycle_object *obj2 = create_cycle_object(allocator);
-    cycle_object *obj3 = create_cycle_object(allocator);
-    assert(obj1 != NULL);
-    assert(obj2 != NULL);
-    assert(obj3 != NULL);
-    obj1->ref_to = obj2;
-    object_manager_increase(obj2->manager);
-    obj2->ref_to = obj3;
-    object_manager_increase(obj3->manager);
-    obj3->ref_to = obj1;
-    object_manager_increase(obj1->manager);
-    assert(detected_cycle(obj1) == 1);
-    assert(detected_cycle(obj2) == 1);
-    assert(detected_cycle(obj3) == 1);
-    cycle_object *obj4 = create_cycle_object(allocator);
-    assert(obj4 != NULL);
-    assert(detected_cycle(obj4) == 0);
-    delete_cycle(allocator, obj1);
-    object_manager_release(obj4->manager);
+    pool_allocator_t *allocator = pool_allocator_initialize(2, sizeof(int));
+
+    chunk_t *current = allocator->free_list;
+    chunk_t *next = current->next;
+
+    int *memory1 = (int *)pool_allocator_alloc(allocator);
+    assert(memory1 != NULL);
+    *memory1 = 1;
+    assert(*memory1 == 1);
+    assert(current == (chunk_t *)((char *)memory1 - sizeof(chunk_t)));
+    assert(next == allocator->free_list);
+
+    current = allocator->free_list;
+    int *memory2 = (int *)pool_allocator_alloc(allocator);
+    assert(memory2 != NULL);
+    *memory2 = 2;
+    assert(*memory2 == 2);
+    assert(current == (chunk_t *)((char *)memory2 - sizeof(chunk_t)));
+    assert(allocator->free_list == NULL);
+
     pool_allocator_deinitialize(allocator);
+}
+
+void pool_allocator_free_test()
+{
+    pool_allocator_t *allocator = pool_allocator_initialize(2, sizeof(int));
+
+    void *memory1 = pool_allocator_alloc(allocator);
+    void *memory2 = pool_allocator_alloc(allocator);
+
+    pool_allocator_free(allocator, memory2);
+    assert(allocator->free_list == (chunk_t *)((char *)memory2 - sizeof(chunk_t)));
+    pool_allocator_free(allocator, memory1);
+    assert(allocator->free_list == (chunk_t *)((char *)memory1 - sizeof(chunk_t)));
+
+    pool_allocator_deinitialize(allocator);
+}
+
+void pool_allocator_overflow_test()
+{
+    pool_allocator_t *allocator = pool_allocator_initialize(1, sizeof(int));
+
+    void *memory1 = pool_allocator_alloc(allocator);
+    void *memory2 = pool_allocator_alloc(allocator);
+    assert(memory2 == NULL);
+
+    pool_allocator_deinitialize(allocator);
+}
+
+void pool_allocator_request_zero_bytes_test()
+{
+    pool_allocator_t *allocator = pool_allocator_initialize(0, sizeof(int));
+    assert(allocator == NULL);
+
+    allocator = pool_allocator_initialize(4, 0);
+    assert(allocator == NULL);
 }
 
 int main()
 {
-    create_cycle_reference_test();
-    detected_cycle_test();
+    pool_allocator_initialize_test();
+    pool_allocator_alloc_test();
+    pool_allocator_free_test();
+    pool_allocator_overflow_test();
+    pool_allocator_request_zero_bytes_test();
+    printf("Success!\n");
     return 0;
 }
