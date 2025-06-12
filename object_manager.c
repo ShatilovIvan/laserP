@@ -54,3 +54,4 @@ void object_manager_release(object_manager_t *object_manager)
         pool_allocator_free(object_manager->allocator, object_manager);
     }
 }
+
